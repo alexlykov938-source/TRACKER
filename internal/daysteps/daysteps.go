@@ -38,12 +38,22 @@ func parsePackage(data string) (int, time.Duration, error) {
 
 func DayActionInfo(data string, weight, height float64) string {
 	steps, duration, err := parsePackage(data)
+
 	if err != nil {
-		return fmt.Sprintf("Error: %v", err)
+		fmt.Println(err)
+		return ""
 	}
 
 	if steps < 0 {
-		return "Error: steps cannot be negative"
+		return ""
+	}
+
+	if weight <= 0 {
+		return "Error: weight must be greater than zero"
+	}
+
+	if height <= 0 {
+		return "Error: height must be greater than zero"
 	}
 
 	if duration < 0 {

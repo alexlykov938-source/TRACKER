@@ -39,7 +39,6 @@ func parseTraining(data string) (int, string, time.Duration, error) {
 	return steps, trainingType, duration, nil
 }
 
-
 func distance(steps int, height float64) float64 {
 	lengthStep := float64(steps) * (height * stepLengthCoefficient)
 	return lengthStep / mInKm
@@ -58,6 +57,8 @@ func TrainingInfo(data string, weight, height float64) (string, error) {
 		return "", fmt.Errorf("error parsing training data: %v", err)
 	}
 
+	durationHours := duration.Hours()
+
 	switch trainingType {
 	case "Бег", "Running":
 		distance := distance(steps, height)
@@ -66,7 +67,7 @@ func TrainingInfo(data string, weight, height float64) (string, error) {
 		if err != nil {
 			return "", fmt.Errorf("error calculating running calories: %v", err)
 		}
-		return fmt.Sprintf("Тип тренировки: %s.\nДлительность: %s.\nДистанция: %.2f км.\nСкорость: %.2f км/ч.\nСожгли калорий: %.2f ккал.", trainingType, duration, distance, meanSpeed, calories), nil
+		return fmt.Sprintf("Тип тренировки: %s\nДлительность: %s\nДистанция: %.2f км.\nСкорость: %.2f км/ч.\nСожгли калорий: %.2f\n", trainingType, durationHours, distance, meanSpeed, calories), nil
 	case "Ходьба", "Walking":
 		distance := distance(steps, height)
 		meanSpeed := meanSpeed(steps, height, duration)
@@ -74,7 +75,7 @@ func TrainingInfo(data string, weight, height float64) (string, error) {
 		if err != nil {
 			return "", fmt.Errorf("error calculating walking calories: %v", err)
 		}
-		return fmt.Sprintf("Тип тренировки: %s.\nДлительность: %s.\nДистанция: %.2f км.\nСкорость: %.2f км/ч.\nСожгли калорий: %.2f ккал.", trainingType, duration, distance, meanSpeed, calories), nil
+		return fmt.Sprintf("Тип тренировки: %s\nДлительность: %s\nДистанция: %.2f км.\nСкорость: %.2f км/ч.\nСожгли калорий: %.2f\n", trainingType, durationHours, distance, meanSpeed, calories), nil
 	default:
 		return "", fmt.Errorf("unknown training type: %s", trainingType)
 	}
